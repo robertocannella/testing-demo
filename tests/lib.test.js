@@ -1,6 +1,7 @@
 
 const lib = require('../lib');
 const db = require('../db');
+const mail = require('../mail');
 
 describe('absolute', () => {
     // we can rename 'test' to 'it'
@@ -99,7 +100,6 @@ describe('fizzBuzz', () => {
     })
 });
 
-
 // Applying Mock Function
 describe('applyDiscount', () => {
     it('should apply 10% discount if customer has more than 10 points', () => {
@@ -113,3 +113,44 @@ describe('applyDiscount', () => {
         expect(order.totalPrice).toBe(9)
     });
 });
+
+// Another mock funtion checking interaction
+describe('notifyCustomer', () => {
+    it('should send an email to the customer', () => {
+        db.getCustomerSync = function (customerId) {
+            console.log('fake db call....')
+            return ({ email: 'a' })
+        }
+        let mailSent = false;
+        mail.send = function (email, message) {
+            mailSent = true;
+        }
+        lib.notifyCustomer({ id: 1 });
+        expect(mailSent).toBe(true);
+    });
+});
+
+// Mock function using Jest
+describe('notifyCustomer', () => {
+    it('should send an email to the customer', () => {
+
+
+        // const mockFunction = jest.fn();
+        // mockFunction.mockReturnValue(1);  <-- Return a value
+        // mockFunction.mockResolvedValue(1); // <-- Return a promise
+        // mockFunction.mockRejectedValue(new Error('...'));  // <-- Return a rejected promise
+
+        // const result = await mockFunction();
+        // console.log(result)
+
+        db.getCustomerSync = jest.fn().mockReturnValue({ email: 'a' });
+        mail.send = jest.fn()
+
+        lib.notifyCustomer({ id: 1 });
+
+        expect(mail.send).toHaveBeenCalled();
+        expect(mail.send.mock.calls[0][0]).toBe('a');  // <-- Jest stores the calls as an array
+        expect(mail.send.mock.calls[0][1]).toMatch(/order/);
+    });
+});
+
