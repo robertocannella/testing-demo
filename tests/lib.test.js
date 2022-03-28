@@ -1,5 +1,6 @@
 
-const lib = require('../lib')
+const lib = require('../lib');
+const db = require('../db');
 
 describe('absolute', () => {
     // we can rename 'test' to 'it'
@@ -96,4 +97,19 @@ describe('fizzBuzz', () => {
         const result = lib.fizzBuzz(1);
         expect(result).toBe(1);
     })
+});
+
+
+// Applying Mock Function
+describe('applyDiscount', () => {
+    it('should apply 10% discount if customer has more than 10 points', () => {
+        db.getCustomerSync = function (customerId) {
+            console.log('fake db call....')
+            return ({ id: customerId, points: 20 })
+        }
+
+        const order = { id: 1, totalPrice: 10 };
+        lib.applyDiscount(order);
+        expect(order.totalPrice).toBe(9)
+    });
 });
