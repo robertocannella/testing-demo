@@ -6,8 +6,9 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^27.5.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
