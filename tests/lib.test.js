@@ -29,4 +29,17 @@ describe('greet', () => {
         //expect(result).toMatch(/Roberto/);  <-- can use REGEX or 'toContain'
         expect(result).toContain('Roberto')
     })
-})
+});
+
+describe('getCurrencies', () => {
+    it('should return supported currencies', () => {
+        const result = lib.getCurrencies();
+        // Proper solution
+        expect(result).toContain('USD');
+        expect(result).toContain('EUR');
+        expect(result).toContain('AUD');
+
+        // Ideal solution
+        expect(result).toEqual(expect.arrayContaining(['EUR', 'AUD', 'USD']))
+    })
+});
